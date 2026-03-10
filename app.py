@@ -1,15 +1,15 @@
 """
-Strava Coach - Page d'accueil
+Garmin Coach - Page d'accueil
 """
 
 import streamlit as st
 import pandas as pd
-from lib.auth import get_strava_token, get_strava_auth_url, get_garmin_client
+from lib.auth import get_garmin_client
 from lib.data import load_all_data
 from lib.metrics import compute_training_load
 
 st.set_page_config(
-    page_title="Strava Coach",
+    page_title="Garmin Coach",
     page_icon="🏃",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -17,26 +17,25 @@ st.set_page_config(
 
 # --- Sidebar ---
 with st.sidebar:
-    st.title("🏃 Strava Coach")
+    st.title("🏃 Garmin Coach")
     st.caption("Analyse & coaching personnalise")
 
 # --- Auth ---
-token, needs_auth = get_strava_token()
+garmin, auth_error = get_garmin_client()
 
-if needs_auth:
-    st.title("🏃 Strava Coach")
+if auth_error:
+    st.title("🏃 Garmin Coach")
     st.markdown("---")
-    st.subheader("Connexion Strava requise")
-    auth_url = get_strava_auth_url()
-    st.link_button("Se connecter a Strava", auth_url, type="primary")
-    st.caption("Tu seras redirige vers Strava pour autoriser l'acces a tes activites.")
+    st.error(auth_error)
     st.stop()
 
 # --- Load data ---
 if "df" not in st.session_state:
-    with st.spinner("Chargement des donnees..."):
-        garmin = get_garmin_client()
-        df = load_all_data(token, garmin)
+    with st.spinner("Chargement des donnees Garmin..."):
+        df = load_all_data(garmin)
+        if df.empty:
+            st.error("Aucune course trouvee sur Garmin Connect.")
+            st.stop()
         st.session_state["df"] = df
         st.session_state["load_df"] = compute_training_load(df)
 
@@ -53,17 +52,15 @@ with st.sidebar:
         st.rerun()
 
     hr_count = df["avg_hr"].notna().sum()
-    st.success(f"✅ Strava connecte")
+    st.success(f"✅ Garmin connecte ({len(df)} courses)")
     if hr_count > 0:
-        st.success(f"✅ Garmin FC ({hr_count}/{len(df)} sorties)")
-    else:
-        st.warning("⚠️ FC non disponible")
+        st.success(f"✅ FC disponible ({hr_count}/{len(df)} sorties)")
 
     st.markdown("---")
     st.caption(f"Derniere activite : {df['date'].max().strftime('%d/%m/%Y')}")
 
 # --- Main page ---
-st.title("🏃 Strava Coach")
+st.title("🏃 Garmin Coach")
 st.markdown(f"**{len(df)} courses** du {df['date'].min().strftime('%d/%m/%Y')} au {df['date'].max().strftime('%d/%m/%Y')}")
 
 # --- Key metrics ---

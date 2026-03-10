@@ -1,7 +1,7 @@
 .env
-strava_token.json
 __pycache__/
 .venv/
 *.png
-garmin_hr_cache.json
 .streamlit/secrets.toml
+strava_token.json
+strava_analysis.py
