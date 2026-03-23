@@ -461,21 +461,23 @@ def estimate_race_paces(diagnosis, race_key, utmb_index=None):
     }
 
     if race_key == "10km":
-        paces["allure_course"] = _clamp(gap / 1.40)
-        paces["intervalles"] = _clamp(gap / 1.50)
-        paces["tempo"] = _clamp(gap / 1.25)
+        paces["allure_course"] = _clamp(gap / 1.22)
+        paces["intervalles"] = _clamp(gap / 1.28)
+        paces["tempo"] = _clamp(gap / 1.11)
     elif race_key == "semi":
-        paces["allure_course"] = _clamp(gap / 1.30)
-        paces["intervalles"] = _clamp(gap / 1.45)
-        paces["tempo"] = _clamp(gap / 1.20)
+        paces["allure_course"] = _clamp(gap / 1.15)
+        paces["intervalles"] = _clamp(gap / 1.28)
+        paces["tempo"] = _clamp(gap / 1.11)
     elif race_key == "marathon":
-        paces["allure_course"] = _clamp(gap / 1.20)
-        paces["intervalles"] = _clamp(gap / 1.40)
-        paces["tempo"] = _clamp(gap / 1.25)
+        paces["allure_course"] = _clamp(gap / 1.08)
+        paces["intervalles"] = _clamp(gap / 1.28)
+        paces["tempo"] = _clamp(gap / 1.11)
     elif race_key.startswith("trail"):
         paces["effort_montee"] = "Z2-Z3, marche active si pente > 15%"
         paces["effort_plat"] = "Z2, course facile"
-        paces["tempo"] = _clamp(gap / 1.15)
+        paces["tempo"] = _clamp(gap / 1.11)
+        paces["seuil"] = _clamp(gap / 1.18)
+        paces["intervalles"] = _clamp(gap / 1.28)
 
     # Estimated finish time
     dist = profile["distance_km"]
@@ -668,7 +670,7 @@ def generate_weekly_plan(diagnosis, sessions_per_week=4):
     gap = diagnosis["gap_recent"]
     p_facile = _format_pace(gap)
     p_recup = _format_pace(gap * 1.10)
-    p_seuil = _format_pace(gap / 1.20)
+    p_seuil = _format_pace(gap / 1.18)
 
     if sessions_per_week == 3:
         distribution = [

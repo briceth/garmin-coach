@@ -5,7 +5,7 @@ Training metrics: TRIMP, CTL/ATL/TSB, HR zones, GAP effort zones.
 import numpy as np
 import pandas as pd
 
-FC_MAX = 185
+FC_MAX = 192
 
 HR_ZONES = {
     "Z1 Recup":     (0,              0.60 * FC_MAX),
@@ -16,11 +16,11 @@ HR_ZONES = {
 }
 
 GAP_ZONES = [
-    ("Z1 Recup",     6.5,  99),
-    ("Z2 Endurance", 5.5,  6.5),
-    ("Z3 Tempo",     4.75, 5.5),
-    ("Z4 Seuil",     4.0,  4.75),
-    ("Z5 VO2max",    0,    4.0),
+    ("Z1 Recup",     5.5,  99),
+    ("Z2 Endurance", 4.75, 5.5),
+    ("Z3 Tempo",     4.25, 4.75),
+    ("Z4 Seuil",     3.92, 4.25),
+    ("Z5 VO2max",    0,    3.92),
 ]
 
 
